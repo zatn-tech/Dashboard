@@ -146,7 +146,7 @@ const AdminGallery = () => {
       </div>
       <div className="mt-8 mx-16">
         <h2 className="text-3xl font-bold mb-4">Images</h2>
-        <div className="flex space-x-2 overflow-x-scroll no-scrollbar">
+        <div className=" space-x-2 overflow-x-scroll grid grid-cols-6 no-scrollbar">
         {galleryItems
             .filter((item) => item.type === 'image') // Filter images
             .map((item) => (

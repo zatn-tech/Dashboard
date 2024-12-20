@@ -37,8 +37,6 @@ router.get('/',async(req,res)=>{
 router.post('/',upload.single('file'),async(req,res)=>{
     const {type,description} = req.body
     const file = req.file ? req.file.filename : req.body.file; 
-    console.log(req.body)
-
     try{
         const galleryObj = await Gallery.create({
             type:type,
@@ -59,7 +57,6 @@ router.post('/',upload.single('file'),async(req,res)=>{
 
 router.delete('/:id',async(req,res)=>{
     const id =req.params.id
-    console.log(id)
     try{
         const galleryObj =await Gallery.findByIdAndDelete(id)
         if(!galleryObj)

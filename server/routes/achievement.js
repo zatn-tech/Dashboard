@@ -37,9 +37,6 @@ router.get('/',async(req,res)=>{
 // Post route to handle file upload
 router.post('/', upload.single('file'), async (req, res) => {
   try {
-    // Log the incoming request data
-    console.log('File Upload:', req.file);
-    console.log('Form Data:', req.body);
 
     // Extracting the form fields and file data
     const { topic, description } = req.body;
@@ -64,7 +61,6 @@ router.post('/', upload.single('file'), async (req, res) => {
     return res.status(201).json({ message: 'Achievement created successfully' });
   } catch (err) {
     // Handle errors
-    console.error('Error:', err);
     return res.status(500).json({ error: 'An error occurred during the upload process', details: err });
   }
 });
@@ -74,8 +70,6 @@ router.put('/:id', upload.single('file'), async (req, res) => {
     const id = req.params.id; // Access the id correctly from req.params
     try {
       // Log the received data
-      console.log(req.body);
-      console.log(req.file); // Log the uploaded file data
   
       // Prepare the updated fields (file might be null if no file is uploaded)
       const updateData = {

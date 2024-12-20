@@ -18,7 +18,7 @@ const User = require('./models/UserModel')
 app.use(express.json({limit:'20mb'}))
 app.use(express.urlencoded({extended:true,limit:'20mb'}))
 app.use('/files', express.static(__dirname+'/files'));
-app.use(cors({credentials:true,origin:['http://localhost:3001','http://localhost:3000']}))
+app.use(cors({credentials:true,origin:['http://localhost:3001','http://localhost:3000','https://61q15751-3000.inc1.devtunnels.ms']}))
 app.use(cookieParser())
 
 //routes import
@@ -28,6 +28,7 @@ const careerRoute = require('./routes/career')
 const galleryRoute = require('./routes/gallery')
 const interestedtRoute = require('./routes/interested')
 const authenticationRoute = require('./routes/authentication')
+const homeRoute = require('./routes/home')
 
 // server connection
 app.listen(PORT,console.log("SERVER RUNNING ON PORT : "+PORT))
@@ -182,3 +183,4 @@ app.use('/gallery',galleryRoute)
 app.use('/interested',interestedtRoute)
 app.use('/career',careerRoute)
 app.use('/authentication',authenticationRoute)
+app.use('/home',homeRoute)

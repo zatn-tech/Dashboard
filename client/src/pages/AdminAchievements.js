@@ -48,6 +48,7 @@ const AdminAchievements = () => {
       if (res.ok) {
         alert('Achievement uploaded successfully!');
         getAchievements()
+        closePopup()
         // You can refresh or update the list of achievements here
       } else {
         alert("Error uploading achievement.");
