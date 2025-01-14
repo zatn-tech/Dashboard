@@ -18,7 +18,7 @@ const User = require('./models/UserModel')
 app.use(express.json({limit:'20mb'}))
 app.use(express.urlencoded({extended:true,limit:'20mb'}))
 app.use('/files', express.static(__dirname+'/files'));
-app.use(cors({credentials:true,origin:['http://localhost:3001','http://localhost:3000','https://61q15751-3000.inc1.devtunnels.ms']}))
+app.use(cors({credentials:true,origin:['http://localhost:3001','http://localhost:3000','http://dhanam.zatn.shop','https://dhanam.zatn.shop','http://admin.dhanamschool.com','https://admin.dhanamschool.com','http://dhanamschool.com','https://dhanamschool.com']}))
 app.use(cookieParser())
 
 //routes import
