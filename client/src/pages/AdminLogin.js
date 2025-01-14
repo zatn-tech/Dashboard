@@ -9,9 +9,9 @@ const AdminLogin = () => {
 
     const login =async()=>{
         try{
-            const res = await fetch('http://localhost:2003/authentication/login',{
+            const res = await fetch('https://api.zatn.shop/authentication/login',{
                 method:'POST',
-                headers:{'Content-type':'application/json'},
+                headers:{'Content-type':'application/json', "Access-Control-Allow-Origin": "*"},
                 body:JSON.stringify({username,password}),
                 credentials:'include',
             })

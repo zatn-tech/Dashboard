@@ -1,15 +1,16 @@
-import React, { useState,useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../component/Layout';
 
 const AdminGallery = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
   const [mediaType, setMediaType] = useState('image'); // State to manage whether user is uploading an image or video
   const [file, setFile] = useState(null); // For storing selected image file
+  const [files, setFiles] = useState([]); //For storing bulk files
   const [videoLink, setVideoLink] = useState(''); // For storing video URL
   const [description, setDescription] = useState(''); // For storing description input
   const [galleryItems, setGalleryItems] = useState([]);
   const isAuthenticated = useContext(AuthContext)
-  
+
   useEffect(() => {
     if (isAuthenticated) {
       fetchGalleryItems();
@@ -18,7 +19,13 @@ const AdminGallery = () => {
 
   const fetchGalleryItems = async () => {
     try {
-      const res = await fetch('http://localhost:2003/gallery/');
+      const res = await fetch('https://api.zatn.shop/gallery/', {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      });
       const data = await res.json();
       console.log(data)
       setGalleryItems(data);
@@ -69,6 +76,11 @@ const AdminGallery = () => {
     setFile(event.target.files[0]); // Store the selected file
   };
 
+  //Handle bulk file change
+  const handleBulkFileChange = (e) => {
+    setFiles(e.target.files);
+  };
+
   // Handle video URL input
   const handleVideoLinkChange = (event) => {
     setVideoLink(event.target.value); // Store the video URL
@@ -79,34 +91,69 @@ const AdminGallery = () => {
     setDescription(event.target.value); // Store the description
   };
 
+  //Handle bulk
+  const handleBulkSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!description) {
+      alert('Please provide a description');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("type", mediaType)
+    for (let i = 0; i < files.length; i++) {
+      console.log(i)
+      formData.append('files', files[i]);
+    }
+    formData.append('description', description);  // Send the description
+    console.log(formData)
+
+    try {
+      const response = await fetch('https://api.zatn.shop/gallery/bulk', {
+        method:'POST',
+        headers: {
+          'Accept': 'application/json',
+        "Access-Control-Allow-Origin": "*",
+        },
+        body:formData,
+      });
+      console.log('Success:', response.data);
+    } catch (error) {
+      console.error('Error uploading files:', error);
+    }
+  };
+
+
   // Handle form submission
   const handleSubmit = async () => {
     const formData = new FormData();
-    
-    formData.append("type",mediaType)
+
+    formData.append("type", mediaType)
     // If image is selected
     if (mediaType === 'image' && file) {
       formData.append('file', file);
     }
-    
+
     // If video URL is provided
     if (mediaType === 'video' && videoLink) {
       console.log(videoLink)
       formData.append('file', videoLink);
     }
-    
+
     // Add description
     formData.append('description', description);
-    
+
     // Call your API for uploading image or video
-    const res = await fetch('http://localhost:2003/gallery', {
+    const res = await fetch('https://api.zatn.shop/gallery', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
+        "Access-Control-Allow-Origin": "*",
       },
       body: formData,
     });
-    
+
     if (res.ok) {
       alert('Media uploaded successfully!');
       closeModal(); // Close the modal after successful upload
@@ -118,9 +165,9 @@ const AdminGallery = () => {
 
   const handleDelete = async (id) => {
     try {
-      const res = await fetch(`http://localhost:2003/gallery/${id}`, {
+      const res = await fetch(`https://api.zatn.shop/gallery/${id}`, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*" },
       });
       if (res.ok) {
         alert('Item deleted successfully');
@@ -147,13 +194,13 @@ const AdminGallery = () => {
       <div className="mt-8 mx-16">
         <h2 className="text-3xl font-bold mb-4">Images</h2>
         <div className=" space-x-2 overflow-x-scroll grid grid-cols-6 no-scrollbar">
-        {galleryItems
+          {galleryItems
             .filter((item) => item.type === 'image') // Filter images
             .map((item) => (
               <div key={item._id} className="relative  group">
                 {/* Image container with hover effect */}
                 <img
-                  src={`http://localhost:2003/files/${item.file}`} // Display image from server
+                  src={`https://api.zatn.shop/files/${item.file}`} // Display image from server
                   alt={item.description}
                   className="mb-2 h-64 w-96 rounded"
                 />
@@ -175,7 +222,7 @@ const AdminGallery = () => {
       <div className="mt-8 mx-16">
         <h2 className="text-3xl font-bold mb-4">Videos</h2>
         <div className="flex overflow-x-scroll no-scrollbar">
-        {galleryItems
+          {galleryItems
             .filter((item) => item.type === 'video') // Filter videos
             .map((item) => (
               <div key={item._id} className="relative group">
@@ -205,7 +252,7 @@ const AdminGallery = () => {
             >
               &times;
             </button>
-            
+
             {/* Select Media Type (Image or Video) */}
             <div className="mb-4">
               <label className="block text-xl font-semibold">Select Media Type</label>
@@ -216,6 +263,7 @@ const AdminGallery = () => {
               >
                 <option value="image">Image</option>
                 <option value="video">Video URL</option>
+                <option value="bulk">Bulk Image</option>
               </select>
             </div>
 
@@ -233,6 +281,26 @@ const AdminGallery = () => {
             )}
 
             {/* Input for Video URL */}
+            {mediaType === 'bulk' && (
+              <div className="mb-4">
+                <label className="block text-xl font-semibold">Select file</label>
+                <form >
+                  <input type="file" multiple onChange={handleBulkFileChange} />
+                  <div className='my-5'>
+
+                  <input
+                  className='border-[1px] border-black w-full h-16 text-center'
+                    type="text"
+                    placeholder="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    />
+                    </div>
+                  <button className="bg-blue-500 text-white p-2 rounded" onClick={handleBulkSubmit}>Upload Photos</button>
+                </form>
+              </div>
+            )}
+
             {mediaType === 'video' && (
               <div className="mb-4">
                 <label className="block text-xl font-semibold">Enter Video URL</label>
@@ -246,7 +314,7 @@ const AdminGallery = () => {
             )}
 
             {/* Description Input */}
-            <div className="mb-4">
+            {mediaType!='bulk'&&<div className="mb-4">
               <label className="block text-xl font-semibold">Description</label>
               <textarea
                 value={description}
@@ -254,17 +322,17 @@ const AdminGallery = () => {
                 className="w-full p-2 border rounded"
                 rows={4}
               />
-            </div>
+            </div>}
 
             {/* Submit Button */}
-            <div className="text-center">
+            {mediaType!='bulk'&&<div className="text-center">
               <button
                 onClick={handleSubmit}
                 className="bg-blue-500 text-white p-2 rounded"
               >
                 Submit
               </button>
-            </div>
+            </div>}
           </div>
         </div>
       )}

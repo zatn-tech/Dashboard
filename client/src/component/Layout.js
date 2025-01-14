@@ -15,10 +15,10 @@ const Layout = () => {
     const redirect = useNavigate()
     const checkAdmin=async()=>{
         try{
-            const res=await fetch('http://localhost:2003/authentication/',{
+            const res=await fetch('https://api.zatn.shop/authentication/',{
                 method:'GET',
                 credentials:'include',
-                headers:{'Content-type':'application/json'}
+                headers:{'Content-type':'application/json', "Access-Control-Allow-Origin": "*"}
             })
             if (res.status === 400) {
                 redirect('/admin/login');
@@ -65,10 +65,10 @@ const Layout = () => {
 
     const logoutFun =async() =>{
         try{
-        const res = await fetch('http://localhost:2003/authentication/logout/',{
+        const res = await fetch('https://api.zatn.shop/authentication/logout/',{
             method:'POST',
           credentials:'include',
-          headers:{'Content-type':'application/json'}
+          headers:{'Content-type':'application/json', "Access-Control-Allow-Origin": "*"}
       })
       if(res.status==200){
           redirect('/admin/login')

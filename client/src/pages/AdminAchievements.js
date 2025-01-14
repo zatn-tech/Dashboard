@@ -26,7 +26,7 @@ const AdminAchievements = () => {
     let res = null;
     try {
       if (id != null) {
-        res = await fetch('http://localhost:2003/achievement/' + id, {
+        res = await fetch('https://api.zatn.shop/achievement/' + id, {
           method: 'PUT',
           headers: {
             Accept: 'application/json',
@@ -35,7 +35,7 @@ const AdminAchievements = () => {
           body: formData,
         });
       } else {
-        res = await fetch('http://localhost:2003/achievement/', {
+        res = await fetch('https://api.zatn.shop/achievement/', {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -61,9 +61,9 @@ const AdminAchievements = () => {
 
   // Get achievements
   const getAchievements = async () => {
-    const res = await fetch('http://localhost:2003/achievement/', {
+    const res = await fetch('https://api.zatn.shop/achievement/', {
       method: 'GET',
-      headers: { 'Content-type': 'application/json' }
+      headers: { 'Content-type': 'application/json', "Access-Control-Allow-Origin": "*" }
     })
     if (res.ok) {
       const achievementArr = await res.json()
@@ -77,9 +77,9 @@ const AdminAchievements = () => {
   // Delete achievement
   const deleteAchievement = async (id) => {
     try {
-      const res = await fetch('http://localhost:2003/achievement/' + id, {
+      const res = await fetch('https://api.zatn.shop/achievement/' + id, {
         method: 'DELETE',
-        headers: { 'Content-type': 'application/json' }
+        headers: { 'Content-type': 'application/json', "Access-Control-Allow-Origin": "*" }
       })
       if (res.ok) {
         alert('Deleted SuccessFully')
@@ -144,7 +144,7 @@ const AdminAchievements = () => {
           <div className='text-5xl font-bold text-center mx-5'>ACHIEVEMENTS</div>
           <div className='my-auto cursor-pointer' onClick={() => handleAchievementClick({})}>➕</div>
         </div>
-        <div className='grid grid-cols-4 mx-16 space-x-4 mt-16'>
+        <div className='grid grid-cols-4 mx-16 space-y-6 space-x-4 mt-16'>
           {achievements.map((achievement, index) => (
             <div
               key={index}
@@ -179,7 +179,7 @@ const AdminAchievements = () => {
                 <img
                   src={
                     selectedAchievement.image ||
-                    `http://localhost:2003/files/${selectedAchievement.file}`
+                    `https://api.zatn.shop/files/${selectedAchievement.file}`
                   }
                   alt="Achievement"
                   className="w-full h-48 mb-2 rounded"
