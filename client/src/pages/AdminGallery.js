@@ -19,7 +19,7 @@ const AdminGallery = () => {
 
   const fetchGalleryItems = async () => {
     try {
-      const res = await fetch('https://api.zatn.shop/gallery/', {
+      const res = await fetch('https://api.dhanamschool.com/gallery/', {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -110,7 +110,7 @@ const AdminGallery = () => {
     console.log(formData)
 
     try {
-      const response = await fetch('https://api.zatn.shop/gallery/bulk', {
+      const response = await fetch('https://api.dhanamschool.com/gallery/bulk', {
         method:'POST',
         headers: {
           'Accept': 'application/json',
@@ -145,7 +145,7 @@ const AdminGallery = () => {
     formData.append('description', description);
 
     // Call your API for uploading image or video
-    const res = await fetch('https://api.zatn.shop/gallery', {
+    const res = await fetch('https://api.dhanamschool.com/gallery', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -165,7 +165,7 @@ const AdminGallery = () => {
 
   const handleDelete = async (id) => {
     try {
-      const res = await fetch(`https://api.zatn.shop/gallery/${id}`, {
+      const res = await fetch(`https://api.dhanamschool.com/gallery/${id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*" },
       });
@@ -200,7 +200,7 @@ const AdminGallery = () => {
               <div key={item._id} className="relative  group">
                 {/* Image container with hover effect */}
                 <img
-                  src={`https://api.zatn.shop/files/${item.file}`} // Display image from server
+                  src={`https://api.dhanamschool.com/files/${item.file}`} // Display image from server
                   alt={item.description}
                   className="mb-2 h-64 w-96 rounded"
                 />

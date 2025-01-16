@@ -39,4 +39,20 @@ router.get('/',async(req,res)=>{
     }
 })
 
+router.delete('/:id',async(req,res)=>{
+    try{
+        const {id} = req.params
+        const contactObj = await Contact.findByIdAndDelete(id)
+        if(!contactObj)
+        {
+            return res.status(401).json("Contact not deleted")
+        }
+        return res.status(201).json(contactObj)
+    }
+    catch(err)
+    {
+        return res.status(501).json({error:err})
+    }
+})
+
 module.exports = router

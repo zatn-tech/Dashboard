@@ -15,7 +15,7 @@ const AdminContact = () => {
   // Fetch contact requests from the backend
   const getContactRequests = async () => {
     try {
-      const res = await fetch('https://api.zatn.shop/contact/', {
+      const res = await fetch('https://api.dhanamschool.com/contact/', {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -42,12 +42,13 @@ const AdminContact = () => {
   // Delete contact request
   const deleteContact = async (id) => {
     try {
-      const res = await fetch(`https://api.zatn.shop/contact/${id}`, {
+      const res = await fetch(`https://api.dhanamschool.com/contact/${id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*" },
       });
       if (res.ok) {
         alert('Contact request deleted successfully.');
+        closeModal()
         getContactRequests(); // Refresh the contact list
       } else {
         alert('Error deleting contact. Please try again.');

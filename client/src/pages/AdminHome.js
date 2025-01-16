@@ -11,7 +11,7 @@ const AdminHome = () => {
 
   const getHomePageDetails = async () => {
     try {
-      const res = await fetch('https://api.zatn.shop/dashboard/', {
+      const res = await fetch('https://api.dhanamschool.com/dashboard/', {
         method: 'GET',
         headers: {
           Accept: 'application/json',

@@ -15,7 +15,7 @@ const Layout = () => {
     const redirect = useNavigate()
     const checkAdmin=async()=>{
         try{
-            const res=await fetch('https://api.zatn.shop/authentication/',{
+            const res=await fetch('https://api.dhanamschool.com/authentication/',{
                 method:'GET',
                 credentials:'include',
                 headers:{'Content-type':'application/json', "Access-Control-Allow-Origin": "*"}
@@ -65,10 +65,10 @@ const Layout = () => {
 
     const logoutFun =async() =>{
         try{
-        const res = await fetch('https://api.zatn.shop/authentication/logout/',{
+        const res = await fetch('https://api.dhanamschool.com/authentication/logout/',{
             method:'POST',
           credentials:'include',
-          headers:{'Content-type':'application/json', "Access-Control-Allow-Origin": "*"}
+          headers:{'Content-type':'application/json', 'Access-Control-Allow-Origin': '*',}
       })
       if(res.status==200){
           redirect('/admin/login')

@@ -37,62 +37,84 @@ router.get('/',async(req,res)=>{
 // Post route to handle file upload
 router.post('/', upload.single('file'), async (req, res) => {
   try {
-
     // Extracting the form fields and file data
-    const { topic, description } = req.body;
-    const file = req.file ? req.file.filename : null;  // Multer puts the file info in req.file
+    const { topic, description, marks } = req.body;
+    const file = req.file ? req.file.filename : null; // Multer puts the file info in req.file
 
     // Ensure the required fields are present
     if (!topic || !description || !file) {
-      return res.status(400).json({ message: 'All fields are required.' });
+      return res.status(400).json({ message: 'All fields are required (topic, description, and file).' });
     }
 
-    // Create new achievement entry in the database
+    // Parse marks if provided (expecting it as a JSON string from the client)
+    let parsedMarks = [];
+    if (marks) {
+      try {
+        parsedMarks = JSON.parse(marks); // Marks should be an array of objects { name, mark: [{ subjectName, subjectMark }] }
+        
+        // Validate the structure of parsedMarks
+        if (
+          !Array.isArray(parsedMarks) || 
+          parsedMarks.some((entry) => 
+            typeof entry.name !== 'string' || 
+            !Array.isArray(entry.mark) || 
+            entry.mark.some((m) => typeof m.subjectName !== 'string' || typeof m.subjectMark !== 'string')
+          )
+        ) {
+          return res.status(400).json({ message: 'Marks must be an array of objects with valid name and mark arrays.' });
+        }
+      } catch (error) {
+        return res.status(400).json({ message: 'Invalid marks format. Must be a JSON array.', error });
+      }
+    }
+
+    // Create a new achievement entry in the database
     const achievement = await Achievements.create({
       file: file,
       topic: topic,
       description: description,
+      marks: parsedMarks, // Store parsed marks directly
     });
 
     if (!achievement) {
-      return res.status(400).json({ message: 'Achievement not created', error: achievement });
+      return res.status(400).json({ message: 'Achievement not created.', error: achievement });
     }
 
-    return res.status(201).json({ message: 'Achievement created successfully' });
+    return res.status(201).json({ message: 'Achievement created successfully', achievement });
   } catch (err) {
     // Handle errors
-    return res.status(500).json({ error: 'An error occurred during the upload process', details: err });
+    return res.status(500).json({ error: 'An error occurred during the upload process.', details: err });
   }
 });
 
+
 //Update achievement
 router.put('/:id', upload.single('file'), async (req, res) => {
-    const id = req.params.id; // Access the id correctly from req.params
-    try {
-      // Log the received data
-  
-      // Prepare the updated fields (file might be null if no file is uploaded)
-      const updateData = {
-        topic: req.body.topic,
-        description: req.body.description,
-        file: req.file ? req.file.filename : undefined, // Update file only if it's provided
-      };
-  
-      // Find and update the achievement by ID
-      const achievement = await Achievements.findByIdAndUpdate(id, updateData, { new: true });
-  
-      if (!achievement) {
-        return res.status(400).json({ message: 'Achievement not updated', error: 'Achievement not found' });
-      }
-  
-      // Return success message
-      return res.status(200).json({ message: 'Achievement updated successfully', achievement });
-    } catch (err) {
-      // Return error message if something goes wrong
-      console.error(err);
-      return res.status(500).json({ error: err.message });
+  const id = req.params.id; // Access the id correctly from req.params
+  try {
+    // Prepare the updated fields (file might be null if no file is uploaded)
+    const updateData = {
+      topic: req.body.topic,
+      description: req.body.description,
+      marks: req.body.marks ? JSON.parse(req.body.marks) : undefined, // Parse marks only if it's provided
+      file: req.file ? req.file.filename : undefined, // Update file only if it's provided
+    };
+
+    // Find and update the achievement by ID
+    const achievement = await Achievements.findByIdAndUpdate(id, updateData, { new: true });
+
+    if (!achievement) {
+      return res.status(400).json({ message: 'Achievement not updated', error: 'Achievement not found' });
     }
-  });
+
+    // Return success message
+    return res.status(200).json({ message: 'Achievement updated successfully', achievement });
+  } catch (err) {
+    // Return error message if something goes wrong
+    console.error(err);
+    return res.status(500).json({ error: err.message });
+  }
+});
 
   //Delete Achievement
   router.delete('/:id',async(req,res)=>{
