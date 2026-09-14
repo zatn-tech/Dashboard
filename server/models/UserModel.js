@@ -11,7 +11,8 @@ const UserSchema = mongoose.Schema({
     },
     profile:{
         type:String,
-        required:true,
+        required:false,
+        default:null,
     },
     designation:{
         type:String,
