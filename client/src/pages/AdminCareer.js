@@ -23,7 +23,7 @@ const AdminCareer = () => {
 
   const deleteCareer = async(id)=>{
     try{
-      const res = await fetch(`https://api.dhanamschool.com/career/${id}`,{
+      const res = await fetch(`https://dhanamschool.com/api/career/${id}`,{
         method:'DELETE',
         headers:{
           'Content-type':'application/json',
@@ -49,7 +49,7 @@ const AdminCareer = () => {
   
   const fetchCareerItems=async()=>{
     try{
-      const res = await fetch("https://api.dhanamschool.com/career",{
+      const res = await fetch("https://dhanamschool.com/api/career",{
         method:'GET',
         headers:{
           'Content-type':'application/json',
@@ -116,7 +116,7 @@ const AdminCareer = () => {
         </button>
         <a
           className="bg-blue-500 text-white px-6 py-3 rounded-lg w-full sm:w-auto transition duration-200 ease-in-out transform hover:scale-105 hover:bg-blue-600 focus:outline-none"
-          href={`https://api.dhanamschool.com/files/${selectedCareer.resume}`}
+          href={`https://dhanamschool.com/api/files/${selectedCareer.resume}`}
           target='_blank'
         >
           Resume

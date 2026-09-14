@@ -15,7 +15,7 @@ const Layout = () => {
     const redirect = useNavigate()
     const checkAdmin=async()=>{
         try{
-            const res=await fetch('https://api.dhanamschool.com/authentication/',{
+            const res=await fetch('https://dhanamschool.com/api/authentication/',{
                 method:'GET',
                 credentials:'include',
                 headers:{'Content-type':'application/json', "Access-Control-Allow-Origin": "*"}
@@ -65,7 +65,7 @@ const Layout = () => {
 
     const logoutFun =async() =>{
         try{
-        const res = await fetch('https://api.dhanamschool.com/authentication/logout/',{
+        const res = await fetch('https://dhanamschool.com/api/authentication/logout/',{
             method:'POST',
           credentials:'include',
           headers:{'Content-type':'application/json', 'Access-Control-Allow-Origin': '*',}

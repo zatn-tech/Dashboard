@@ -15,7 +15,7 @@ const AdminContact = () => {
   // Fetch contact requests from the backend
   const getContactRequests = async () => {
     try {
-      const res = await fetch('https://api.dhanamschool.com/contact/', {
+      const res = await fetch('https://dhanamschool.com/api/contact/', {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -42,7 +42,7 @@ const AdminContact = () => {
   // Delete contact request
   const deleteContact = async (id) => {
     try {
-      const res = await fetch(`https://api.dhanamschool.com/contact/${id}`, {
+      const res = await fetch(`https://dhanamschool.com/api/contact/${id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*" },
       });

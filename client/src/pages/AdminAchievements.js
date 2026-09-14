@@ -26,7 +26,7 @@ const AdminAchievements = () => {
     let res = null;
     try {
       if (id != null) {
-        res = await fetch(`https://api.dhanamschool.com/achievement/${id}`, {
+        res = await fetch(`https://dhanamschool.com/api/achievement/${id}`, {
           method: 'PUT',
           headers: {
             Accept: 'application/json',
@@ -35,7 +35,7 @@ const AdminAchievements = () => {
           body: formData,
         });
       } else {
-        res = await fetch('https://api.dhanamschool.com/achievement/', {
+        res = await fetch('https://dhanamschool.com/api/achievement/', {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -60,7 +60,7 @@ const AdminAchievements = () => {
 
   const getAchievements = async () => {
     try {
-      const res = await fetch('https://api.dhanamschool.com/achievement/', {
+      const res = await fetch('https://dhanamschool.com/api/achievement/', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
       });
@@ -79,7 +79,7 @@ const AdminAchievements = () => {
 
   const deleteAchievement = async (id) => {
     try {
-      const res = await fetch(`https://api.dhanamschool.com/achievement/${id}`, {
+      const res = await fetch(`https://dhanamschool.com/api/achievement/${id}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
       });
@@ -233,7 +233,7 @@ const AdminAchievements = () => {
                 <img
                   src={
                     selectedAchievement.image ||
-                    `https://api.dhanamschool.com/files/${selectedAchievement.file}`
+                    `https://dhanamschool.com/api/files/${selectedAchievement.file}`
                   }
                   alt="Achievement"
                   className="w-full h-48 mb-2 rounded"

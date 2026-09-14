@@ -1,8 +1,9 @@
 const express = require('express')
+const path = require('path')
 const mongoose=require('mongoose')
 const cors=require('cors')
 const bcrypt=require('bcrypt')
-require('dotenv').config()
+require('dotenv').config({ path: path.join(__dirname, '.env') })
 const PORT = process.env.PORT
 const app = express()
 const multer = require('multer')
@@ -34,7 +35,12 @@ const homeRoute = require('./routes/home')
 app.listen(PORT,console.log("SERVER RUNNING ON PORT : "+PORT))
 
 // database connection
-mongoose.connect(process.env.MONGoDB_URI,console.log("Database connected"))
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => console.log("Database connected"))
+    .catch((err) => {
+        console.error("Database connection failed:", err.message)
+        process.exit(1)
+    })
 
 // Helper function to get the start of a given week (Sunday to Saturday)
 function getStartOfWeek(date) {

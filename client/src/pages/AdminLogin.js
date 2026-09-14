@@ -9,7 +9,7 @@ const AdminLogin = () => {
 
     const login =async()=>{
         try{
-            const res = await fetch('https://api.dhanamschool.com/authentication/login',{
+            const res = await fetch('https://dhanamschool.com/api/authentication/login',{
                 method:'POST',
                 headers:{'Content-type':'application/json', "Access-Control-Allow-Origin": "*"},
                 body:JSON.stringify({username,password}),
